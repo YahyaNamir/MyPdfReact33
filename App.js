@@ -3,27 +3,25 @@ import { View, Button, StyleSheet, Alert } from 'react-native';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 
 const playersList = [
-  { id: '1', name: 'Abdelkrim ANBIA', position: 'GK', timeIn: '22:18', timeOut: '12:18' },
-  { id: '2', name: 'Soufiane EL MESRAR', position: 'LB', timeIn: '22:18', timeOut: '12:18' },
-  { id: '3', name: 'Anas EL AYAN', position: 'RB', timeIn: '22:18', timeOut: '12:18' },
-  { id: '4', name: 'Soufian CHAARAOUI', position: 'LM', timeIn: '22:18', timeOut: '12:18' },
-  { id: '5', name: 'EL KHADIR', position: 'RM', timeIn: '22:18', timeOut: '12:18' },
+  { id: '1', name: 'ANBIA', position: 'GK', timeIn: '22:18', timeOut: '12:18' },
+  { id: '2', name: 'EL-MESRAR', position: 'LB', timeIn: '22:18', timeOut: '12:18' },
+  { id: '3', name: 'EL-AYAN', position: 'RB', timeIn: '22:18', timeOut: '12:18' },
+  { id: '4', name: 'CHAARAOUI', position: 'LM', timeIn: '22:18', timeOut: '12:18' },
+  { id: '5', name: 'EL-KHADIR', position: 'RM', timeIn: '22:18', timeOut: '12:18' },
 ];
 
 const absentPlayers = [
   { id: '1', name: 'Player 1' },
   { id: '2', name: 'Player 2' },
-  { id: '3', name: 'Player 3' },
-  { id: '4', name: 'Player 4' },
-  { id: '5', name: 'Player 5' },
+  { id: '3', name: 'Player 3' }
 ];
 
 const positions = {
-  GK: { top: '5%', right: '40%' },
-  LB: { top: '15%', left: '10%' },
-  RB: { top: '15%', right: '10%' },
-  LM: { top: '30%', left: '15%' },
-  RM: { top: '30%', right: '15%' },
+  GK: { top: '38%', left: '8%' },
+  LB: { top: '15%', left: '25%' },
+  RB: { top: '70%', left: '25%' },
+  LM: { top: '20%', right: '30%' },
+  RM: { top: '60%', right: '30%' },
 };
 
 const playerItemHtml = player => `
@@ -53,7 +51,8 @@ const absentPlayersHtml = `
     display: flex; 
     flex-wrap: wrap; 
     padding: 5px; 
-    background-color: #14367b; 
+    background-color: #a1a3a7;
+    color;  
     border-top: 1px solid #ccc;
     border-radius: 30px;
   ">
@@ -63,13 +62,14 @@ const absentPlayersHtml = `
       <div style="
         flex: 0 0 auto; 
         width: 100px; 
+        color: #000000;
         text-align: center; 
         margin-right: 5px;
         margin-bottom: 5px; 
       ">
         <div style="
-          font-size: 16px; 
-          color: #ffffff; 
+          font-size: 14px; 
+          color: #000000; 
           font-family: 'Poppins-Bold';
         ">
           ${player.name}
@@ -105,19 +105,19 @@ const lineupHtml = `
             ? `right: ${positions[player.position].right};`
             : ''
         }
-        width: 60px;
-        height: 60px;
+        width: 30px;
+        height: 30px;
         border-radius: 50%;
-        background-color: #e3eff4cd;
+        background-color: #2fb1e8cd;
         border: 1px solid #00000083;
         display: flex;
         justify-content: center;
         align-items: center;
-        padding: 5px;">
+        padding: 10px;">
         <div style="font-size: 14px; color: #000; font-family: 'Poppins-ExtraBold'; position: absolute; top: -15px;">
           ${player.position}
         </div>
-        <div style="font-size: 10px; color: #000; font-family: 'Poppins-Bold'; text-align: center;">
+        <div style="font-size: 8px; color: #000; font-family: 'Poppins-Bold'; text-align: center;">
           ${player.name}
         </div>
       </div>
@@ -128,14 +128,17 @@ const lineupHtml = `
 `;
 
 const matchStatsHtml = (title, stats) => `
-  <div style="background-color: #14367b; padding: 20px; border-radius: 15px; margin: 20px 0;">
+  <div style="background-color: #14367b; padding: 5px; border-radius: 15px; margin: 10px 0;">
     <h2 style="color: white; text-align: center;">${title}</h2>
     ${stats.map(stat => `
       <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #555;">
         <span style="color: white; font-weight: bold;">${stat.label}</span>
-        <div style="display: flex; width: 50%; height: 5px; background: linear-gradient(to right, ${stat.team1Color} ${stat.team1Percentage}%, ${stat.team2Color} ${stat.team2Percentage}%); border-radius: 10px;"></div>
-        <span style="color: white;">${stat.team1Value}</span>
-        <span style="color: white;">${stat.team2Value}</span>
+        <div style="display: flex; justify-content: space-between; align-items: center; width: 50%; margin: 0 10px;">
+          <span style="color: ${stat.team1Color}; font-weight: bold; margin-right: 5px;">${stat.team1Value}</span>
+          <div style="flex: 1; height: 5px; background: ${stat.team1Color}; border-radius: 10px; margin-right: 5px;"></div>
+          <div style="flex: 1; height: 5px; background: ${stat.team2Color}; border-radius: 10px;"></div>
+          <span style="color: ${stat.team2Color}; font-weight: bold; margin-left: 5px;">${stat.team2Value}</span>
+        </div>
       </div>
     `).join('')}
   </div>
@@ -159,30 +162,10 @@ const createPDF = async () => {
       <html>
         <head>
           <style>
-            @page {
-              size: A4;
-              margin: 0;
-            }
             body {
-              margin: 0;
-              padding: 0;
-              font-family: Arial, sans-serif;
-              font-size: 14pt;
-              line-height: 1.6;
+              font-family: 'Poppins-Regular';
             }
-            .header {
-              text-align: center;
-              background-color: #ffffff;
-              padding: 10px;
-              border-bottom: 1px solid #000000;
-            }
-            .header p {
-              font-size: 24px;
-              font-weight: bold;
-              color: #000000;
-              margin: 0;
-            }
-            .logos {
+              .logos {
               display: flex;
               justify-content: space-between;
               align-items: center;
@@ -204,53 +187,88 @@ const createPDF = async () => {
               font-size: 18px;
               color: #ccc;
             }
-            .page {
-              page-break-after: always;
-              position: relative;
+            .header {
+              color: #000000;
               padding: 20px;
+              text-align: center;
+              font-size: 40px;
+              border-bottom: 5px solid #e3eff4;
             }
-            .top-left, .top-right {
-              width: 45%;
+            .header p {
+              font-size: 24px;
+              font-family: 'Poppins-Bold';
+              margin: 0;
+            }
+            .header img {
+              margin-top: 20px;
+            }
+            .content {
+              padding: 30px;
+              display: flex;
+            }
+            .left-section, .right-section {
+              width: 50%;
+            }
+            .right-section {
+              padding-left: 30px;
+            }
+            .section {
+              margin-bottom: 30px;
               padding: 10px;
-              box-sizing: border-box;
-              float: left;
-            }
-            .top-right {
-              float: right;
-            }
-            .top-left {
-              border-right: 1px solid #ccc;
+              background-color: #f9f9f9;
+              border-radius: 10px;
             }
             .lineup {
               position: relative;
-              width: 100%;
-              height: 200px;
-              padding: 10px;
-              box-sizing: border-box;
-            }
-            .lineup div {
-              box-sizing: border-box;
-              font-size: 14px;
-            }
-            .match-stats {
-              margin-top: 20px;
-            }
-            .match-stats h2 {
-              color: #fff;
-            }
-            .match-stats div {
-              background-color: #14367b;
-              padding: 10px;
+              border: 2px solid #e3eff4;
               border-radius: 10px;
-              margin: 10px 0;
+              background-image: url('https://upload.wikimedia.org/wikipedia/commons/c/c9/FutsalPitch.png');
+              width: 100%; 
+              margin : 4px;
+              height: 280px;
+              background-repeat: no-repeat; 
+              background-size: cover;
+              margin-bottom: 30px;
+            }
+            .player {
+              position: absolute;
+              width: 60px;
+              height: 60px;
+              border-radius: 50%;
+              background-color: #e3eff4cd;
+              border: 1px solid #00000083;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              padding: 5px;
+            }
+            .player .name {
+              font-size: 12px;
+              color: #000000;
+              text-align: center;
+            }
+            .player .position {
+              font-size: 14px;
+              color: #000000;
+              position: absolute;
+              top: -15px;
+              text-align: center;
+              font-family: Poppins-Bold;
+            }
+            .full-stat-section {
+              margin-top: 50px;
+              padding: 20px;
+              color: #000000;
+              border-radius: 15px;
+              text-align: centre;
             }
           </style>
         </head>
         <body>
           <div class="header">
-            <p>Match Info</p>
+            <p> Match Info : </p>
           </div>
-          <div class="logos">
+            <div class="logos">
             <img src="https://seeklogo.com/images/R/raja-club-athletic-rca-logo-2C8B83D406-seeklogo.com.png" alt="RCA Logo" />
             <div>
               <div class="score">RCA 2 - 0 WAC</div>
@@ -258,36 +276,28 @@ const createPDF = async () => {
             </div>
             <img src="https://seeklogo.com/images/W/wac-wydad-athletic-club-of-casablanca-2022-logo-67FEE5AE5E-seeklogo.com.png" alt="WAC Logo" />
           </div>
-          <div class="page">
-            <div class="top-left">
-              <h1 style="text-align: center; color: #ff0000;">Player List</h1>
-              <div>${playersHtml}</div>
-              <div class="absent-players">
-                <h2 style="text-align: center; color: #ff0000;">Absent Players</h2>
-                ${absentPlayersHtml}
-              </div>
+          <div class="content">
+            <div class="left-section">
+              <h2>Players List</h2>
+              <div class="section">${playersHtml}</div>
+
+              <h2>Absent Players</h2>
+              <div class="section">${absentPlayersHtml}</div>
+
+              <h2>First Half Statistics</h2>
+              <div class="section">${matchStatsHtml('First Half Statistics', firstHalfStats)}</div>
             </div>
-            <div class="top-right">
-              <h1 style="text-align: center; color: #ff0000;">Lineup</h1>
-              <div class="lineup">
-                ${lineupHtml}
-              </div>
-              <div class="match-stats">
-                ${matchStatsHtml('First Half Statistics', firstHalfStats)}
-              </div>
+            <div class="right-section">
+              <h2>Lineup</h2>
+              <div class="lineup">${lineupHtml}</div>
+
+              <h2>Second Half Statistics</h2>
+              <div class="section">${matchStatsHtml('Second Half Statistics', secondHalfStats)}</div>
             </div>
           </div>
-          <div class="page">
-            <div class="top-left">
-              <div class="match-stats">
-                ${matchStatsHtml('Second Half Statistics', secondHalfStats)}
-              </div>
-            </div>
-            <div class="top-right">
-              <div class="match-stats">
-                ${matchStatsHtml('Full Match Statistics', fullMatchStats)}
-              </div>
-            </div>
+          <div class="full-stat-section">
+            <h2>Full Match Statistics</h2>
+            ${matchStatsHtml('Full Match Statistics', fullMatchStats)}
           </div>
         </body>
       </html>
@@ -298,17 +308,20 @@ const createPDF = async () => {
 
   try {
     let file = await RNHTMLtoPDF.convert(options);
-    Alert.alert('PDF Created', `File saved at ${file.filePath}`);
+    Alert.alert('PDF Generated', `PDF file has been saved to: ${file.filePath}`);
   } catch (error) {
-    Alert.alert('Error', `Failed to create PDF: ${error.message}`);
+    Alert.alert('Error', 'Failed to generate PDF');
+    console.error(error);
   }
 };
 
-const App = () => (
-  <View style={styles.container}>
-    <Button title="Create PDF" onPress={createPDF} />
-  </View>
-);
+const App = () => {
+  return (
+    <View style={styles.container}>
+      <Button title="Generate PDF" onPress={createPDF} />
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
