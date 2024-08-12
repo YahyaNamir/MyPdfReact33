@@ -201,7 +201,7 @@ const aggregatedStats = chemistryData.reduce((acc, player) => {
   acc.minutePlayer = '50:00'; 
   acc.yellowCard += player.yellowCard;
   acc.redCard += player.redCard;
-  acc.receivedGoal += 10;
+  acc.receivedGoal = 10;
   acc.foulCommitted += player.foulCommitted;
   return acc;
 }, {
@@ -209,7 +209,7 @@ const aggregatedStats = chemistryData.reduce((acc, player) => {
   minutePlayer: '00:00',
   yellowCard: 0,
   redCard: 0,
-  receivedGoal: 10,
+  receivedGoal: 0,
   foulCommitted: 0,
 });
 const chemistryHtml = `
