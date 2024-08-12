@@ -61,7 +61,7 @@ const absentPlayersHtml = `
         player => `
       <div style="
         flex: 0 0 auto; 
-        width: 80px; 
+        width: 90px; 
         color: #000000;
         text-align: center; 
         margin-right: 5px;
