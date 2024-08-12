@@ -144,7 +144,108 @@ const matchStatsHtml = (title, stats) => `
   </div>
 `;
 
+const chemistryData = [
+  {
+    id: '1',
+    name: 'ANBIA',
+    goal: 10,
+    minutePlayer: '50:00',
+    yellowCard: 2,
+    redCard: 1,
+    receivedGoal: 10,
+    foulCommitted: 4,
+  },
+  {
+    id: '2',
+    name: 'EL-AYAN',
+    goal: 2,
+    minutePlayer: '50:00',
+    yellowCard: 1,
+    redCard: 0,
+    receivedGoal: 10,
+    foulCommitted: 2,
+  },
+  {
+    id: '3',
+    name: 'EL-KHADIR',
+    goal:4 ,
+    minutePlayer: '50:00',
+    yellowCard: 2,
+    redCard: 3,
+    receivedGoal: 10,
+    foulCommitted: 7,
+  },
+  {
+    id: '4',
+    name: 'CHAARAOUI',
+    goal: 0,
+    minutePlayer: '50:00',
+    yellowCard: 4,
+    redCard: 2,
+    receivedGoal: 10,
+    foulCommitted: 2,
+  },
+  {
+    id: '5',
+    name: 'EL-MESRAR',
+    goal: 2,
+    minutePlayer: '50:00',
+    yellowCard: 1,
+    redCard: 0,
+    receivedGoal: 10,
+    foulCommitted: 2,
+  },
+];
+const aggregatedStats = chemistryData.reduce((acc, player) => {
+  acc.goal += player.goal;
+  acc.minutePlayer = '50:00'; 
+  acc.yellowCard += player.yellowCard;
+  acc.redCard += player.redCard;
+  acc.receivedGoal += 10;
+  acc.foulCommitted += player.foulCommitted;
+  return acc;
+}, {
+  goal: 0,
+  minutePlayer: '00:00',
+  yellowCard: 0,
+  redCard: 0,
+  receivedGoal: 10,
+  foulCommitted: 0,
+});
+const chemistryHtml = `
+    <div style="padding: 20px; border: 1px solid #ccc; border-radius: 10px; margin-top: 20px;">
+      <h2 style="text-align: center; font-family: 'Poppins-Bold';">Chemistry Summary</h2>
+      <table style="width: 100%; border-collapse: collapse;">
+        <thead>
+          <tr style="background-color: #f9f9f9;">
+            <th style="border: 1px solid #ccc; padding: 10px; text-align: center;">Players</th>
+            <th style="border: 1px solid #ccc; padding: 10px; text-align: center;">Goals</th>
+            <th style="border: 1px solid #ccc; padding: 10px; text-align: center;">Minutes Played</th>
+            <th style="border: 1px solid #ccc; padding: 10px; text-align: center;">Yellow Cards</th>
+            <th style="border: 1px solid #ccc; padding: 10px; text-align: center;">Red Cards</th>
+            <th style="border: 1px solid #ccc; padding: 10px; text-align: center;">Goals Received</th>
+            <th style="border: 1px solid #ccc; padding: 10px; text-align: center;">Fouls Committed</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="text-align: center;">
+            <td style="border: 1px solid #ccc; padding: 10px;">${chemistryData.map(player => player.name).join(', ')}</td>
+            <td style="border: 1px solid #ccc; padding: 10px;">${aggregatedStats.goal}</td>
+            <td style="border: 1px solid #ccc; padding: 10px;">${aggregatedStats.minutePlayer}</td>
+            <td style="border: 1px solid #ccc; padding: 10px;">${aggregatedStats.yellowCard}</td>
+            <td style="border: 1px solid #ccc; padding: 10px;">${aggregatedStats.redCard}</td>
+            <td style="border: 1px solid #ccc; padding: 10px;">${aggregatedStats.receivedGoal}</td>
+            <td style="border: 1px solid #ccc; padding: 10px;">${aggregatedStats.foulCommitted}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  `;
+
 const createPDF = async () => {
+
+
+
   const firstHalfStats = [
     { label: 'Possession de balle', team1Value: '56%', team2Value: '44%', team1Color: 'red', team2Color: 'white', team1Percentage: 56, team2Percentage: 44 },
     { label: 'Nombre de tirs', team1Value: '12', team2Value: '8', team1Color: 'red', team2Color: 'white', team1Percentage: 60, team2Percentage: 40 },
@@ -218,6 +319,11 @@ const createPDF = async () => {
               background-color: #f9f9f9;
               border-radius: 10px;
             }
+            .sectionA {
+              padding: 10px;
+              background-color: #f9f9f9;
+              border-radius: 10px;
+            }
             .lineup {
               position: relative;
               border: 2px solid #e3eff4;
@@ -279,10 +385,9 @@ const createPDF = async () => {
           <div class="content">
             <div class="left-section">
               <h2>Players List</h2>
-              <div class="section">${playersHtml}</div>
+              <div class="sectionA">${playersHtml}</div>
 
-              <h2>Absent Players</h2>
-              <div class="section">${absentPlayersHtml}</div>
+              <div class="sectionA">${absentPlayersHtml}</div>
 
               <h2>First Half Statistics</h2>
               <div class="section">${matchStatsHtml('First Half Statistics', firstHalfStats)}</div>
@@ -299,6 +404,9 @@ const createPDF = async () => {
             <h2>Full Match Statistics</h2>
             ${matchStatsHtml('Full Match Statistics', fullMatchStats)}
           </div>
+
+          <h2>Chimestry List</h2>
+          <div class="section">${chemistryHtml}</div>
         </body>
       </html>
     `,
